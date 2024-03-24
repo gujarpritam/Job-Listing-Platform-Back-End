@@ -2,6 +2,7 @@ require("dotenv").config();
 console.log(process.env.MONGODB_URI);
 const mongoose = require("mongoose");
 const authRoute = require("./routes/auth");
+const jobRoute = require("./routes/job");
 
 const express = require("express");
 
@@ -26,6 +27,7 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/job", jobRoute);
 //  /api/v1/auth/register
 
 const PORT = 3000;
