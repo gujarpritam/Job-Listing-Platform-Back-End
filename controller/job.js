@@ -54,4 +54,23 @@ const createJobPost = async (req, res) => {
   }
 };
 
-module.exports = { createJobPost };
+const getJobDetailsById = async (req, res) => {
+  try {
+    const jobId = req.params.jobId;
+
+    const jobDetails = Job.findById(jobId);
+
+    if (!jobDetails) {
+      return res.status(400).json({
+        message: "Bad request",
+      });
+    }
+
+    res.json({ data: jobDetails });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+module.exports = { createJobPost, getJobDetailsById };
