@@ -30,6 +30,8 @@ const createJobPost = async (req, res) => {
       });
     }
 
+    const userId = req.userId;
+
     const jobDetails = new Job({
       companyName,
       title,
@@ -40,6 +42,7 @@ const createJobPost = async (req, res) => {
       duration,
       locationType,
       skills,
+      refUserId: userId,
     });
 
     await jobDetails.save();
