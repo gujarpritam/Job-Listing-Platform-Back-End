@@ -146,6 +146,15 @@ const updateJobDetailsById = async (req, res) => {
 
 const getAllJobs = async (req, res, next) => {
   try {
+    const title = req.query.title || "";
+
+    //added filter based on title
+    const jobList = await Job.find(
+      { title: { $regex: title, $options: "i" } },
+      { companyName: 1, title: 1 }
+    );
+
+    res.json({ data: jobList });
   } catch (error) {
     next(error);
   }
