@@ -58,7 +58,7 @@ const getJobDetailsById = async (req, res) => {
   try {
     const jobId = req.params.jobId;
 
-    const jobDetails = Job.findById(jobId);
+    const jobDetails = await Job.findById(jobId);
 
     if (!jobDetails) {
       return res.status(400).json({
@@ -73,4 +73,78 @@ const getJobDetailsById = async (req, res) => {
   }
 };
 
-module.exports = { createJobPost, getJobDetailsById };
+const updateJobDetailsById = async (req, res) => {
+  try {
+    const jobId = req.params.jobId;
+    const userId = req.userId;
+
+    if (!jobId) {
+      return res.status(400).json({
+        message: "Bad Request",
+      });
+    }
+
+    const isJobExists = Job.findOne({ _id: jobId, refUserId: userId });
+
+    //bug in this code
+
+    if (!isJobExists) {
+      return res.status(400).json({
+        message: "Bad Request",
+      });
+    }
+
+    const {
+      companyName,
+      title,
+      description,
+      logoUrl,
+      salary,
+      location,
+      duration,
+      locationType,
+      skills,
+      refUserId,
+    } = req.body;
+
+    if (
+      !companyName ||
+      !title ||
+      !description ||
+      !logoUrl ||
+      !salary ||
+      !location ||
+      !duration ||
+      !locationType ||
+      !skills
+    ) {
+      return res.status(400).json({
+        message: "Bad Request",
+      });
+    }
+
+    await Job.updateOne(
+      { _id: jobId, refUserId: userId },
+      {
+        $set: {
+          companyName,
+          title,
+          description,
+          logoUrl,
+          salary,
+          location,
+          duration,
+          locationType,
+          skills,
+        },
+      }
+    );
+
+    res.json({ message: "Job updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+module.exports = { createJobPost, getJobDetailsById, updateJobDetailsById };
