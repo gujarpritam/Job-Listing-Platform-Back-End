@@ -30,6 +30,15 @@ app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/job", jobRoute);
 //  /api/v1/auth/register
 
+app.use("*", (req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
+
+app.use((error, req, res, next) => {
+  console.log(error);
+  res.status(500).json({ errorMessage: "Something went wrong" });
+});
+
 const PORT = 3000;
 
 app.listen(PORT, () => {

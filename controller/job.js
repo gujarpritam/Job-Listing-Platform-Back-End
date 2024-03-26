@@ -49,8 +49,7 @@ const createJobPost = async (req, res) => {
 
     res.json({ message: "Job created successfully" });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Something went wrong" });
+    next(error);
   }
 };
 
@@ -68,8 +67,7 @@ const getJobDetailsById = async (req, res) => {
 
     res.json({ data: jobDetails });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Something went wrong" });
+    next(error);
   }
 };
 
@@ -142,9 +140,20 @@ const updateJobDetailsById = async (req, res) => {
 
     res.json({ message: "Job updated successfully" });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Something went wrong" });
+    next(error);
   }
 };
 
-module.exports = { createJobPost, getJobDetailsById, updateJobDetailsById };
+const getAllJobs = async (req, res, next) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  createJobPost,
+  getJobDetailsById,
+  updateJobDetailsById,
+  getAllJobs,
+};
