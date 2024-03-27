@@ -3,12 +3,14 @@ console.log(process.env.MONGODB_URI);
 const mongoose = require("mongoose");
 const authRoute = require("./routes/auth");
 const jobRoute = require("./routes/job");
+const cors = require("cors");
 
 const express = require("express");
 
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 mongoose
   .connect(process.env.MONGODB_URI)
@@ -39,7 +41,7 @@ app.use((error, req, res, next) => {
   res.status(500).json({ errorMessage: "Something went wrong" });
 });
 
-const PORT = 3000;
+const PORT = 4000;
 
 app.listen(PORT, () => {
   console.log(`backend server running on ${PORT}`);
