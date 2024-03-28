@@ -11,6 +11,9 @@ const createJobPost = async (req, res) => {
       location,
       duration,
       locationType,
+      about,
+      information,
+      jobType,
       skills,
     } = req.body;
 
@@ -23,6 +26,9 @@ const createJobPost = async (req, res) => {
       !location ||
       !duration ||
       !locationType ||
+      !about ||
+      !information ||
+      !jobType ||
       !skills
     ) {
       return res.status(400).json({
@@ -41,6 +47,9 @@ const createJobPost = async (req, res) => {
       location,
       duration,
       locationType,
+      about,
+      information,
+      jobType,
       skills,
       refUserId: userId,
     });
