@@ -1,4 +1,6 @@
 const Job = require("../models/job");
+const { decodeJwtToken } = require("../middlewares/verifyToken");
+const { default: mongoose } = require("mongoose");
 
 const createJobPost = async (req, res) => {
   try {
@@ -65,6 +67,7 @@ const createJobPost = async (req, res) => {
 const getJobDetailsById = async (req, res) => {
   try {
     const jobId = req.params.jobId;
+    const userId = decodeJwtToken(req.headers["authorization"]);
 
     const jobDetails = await Job.findById(jobId);
 
@@ -74,7 +77,16 @@ const getJobDetailsById = async (req, res) => {
       });
     }
 
-    res.json({ data: jobDetails });
+    let isEditable;
+    if (userId) {
+      const ObjectId = mongoose.Types.ObjectId;
+      const id = new ObjectId(userId);
+      if (id === jobDetails.refUserId) {
+        isEditable = true;
+      }
+    }
+
+    res.json({ jobDetails, isEditable: true });
   } catch (error) {
     next(error);
   }
@@ -109,6 +121,9 @@ const updateJobDetailsById = async (req, res) => {
       duration,
       locationType,
       skills,
+      information,
+      jobType,
+      about,
       refUserId,
     } = req.body;
 
@@ -121,7 +136,10 @@ const updateJobDetailsById = async (req, res) => {
       !location ||
       !duration ||
       !locationType ||
-      !skills
+      !skills ||
+      !information ||
+      !jobType ||
+      !about
     ) {
       return res.status(400).json({
         message: "Bad Request",
@@ -141,6 +159,9 @@ const updateJobDetailsById = async (req, res) => {
           duration,
           locationType,
           skills,
+          information,
+          jobType,
+          about,
         },
       }
     );
