@@ -1,5 +1,4 @@
 require("dotenv").config();
-console.log(process.env.MONGODB_URI);
 const mongoose = require("mongoose");
 const authRoute = require("./routes/auth");
 const jobRoute = require("./routes/job");
@@ -41,8 +40,8 @@ app.use((error, req, res, next) => {
   res.status(500).json({ errorMessage: "Something went wrong" });
 });
 
-const PORT = 4000;
+const port = process.env.PORT || 4000;
 
-app.listen(PORT, () => {
-  console.log(`backend server running on ${PORT}`);
+app.listen(port, () => {
+  console.log(`backend server running on ${port}`);
 });
